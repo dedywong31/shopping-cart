@@ -1,5 +1,6 @@
 package org.playground.shoppingcart.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.playground.shoppingcart.dtos.ProductDto;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/products")
+@Tag(name = "Products")
 public class ProductController {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;

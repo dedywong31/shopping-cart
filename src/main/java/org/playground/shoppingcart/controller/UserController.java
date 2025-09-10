@@ -1,5 +1,6 @@
 package org.playground.shoppingcart.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.playground.shoppingcart.entities.User;
 import org.playground.shoppingcart.repositories.UserRepository;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/users")
+@Tag(name = "Users")
 public class UserController {
     private final UserRepository userRepository;
 
