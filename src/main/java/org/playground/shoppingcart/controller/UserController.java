@@ -1,14 +1,17 @@
 package org.playground.shoppingcart.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.playground.shoppingcart.dtos.RegisterUserRequest;
 import org.playground.shoppingcart.entities.User;
+import org.playground.shoppingcart.mappers.UserMapper;
 import org.playground.shoppingcart.repositories.UserRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Users")
 public class UserController {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @GetMapping
     public Iterable<User> getAllUsers() {
@@ -29,5 +33,20 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> registerUser(
+            @Valid @RequestBody RegisterUserRequest request,
+            UriComponentsBuilder uriBuilder
+    ) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("message", "Email is already registered"));
+        }
+        var user = userMapper.toEntity(request);
+        var userDto = userMapper.toDto(user);
+        var uri = uriBuilder.path("/users/{id}").buildAndExpand(userDto.getId()).toUri();
+        return ResponseEntity.created(uri).body(userDto);
     }
 }
