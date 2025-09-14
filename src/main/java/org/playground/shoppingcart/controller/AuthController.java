@@ -2,7 +2,9 @@ package org.playground.shoppingcart.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.playground.shoppingcart.dtos.JwtResponse;
 import org.playground.shoppingcart.dtos.LoginRequest;
+import org.playground.shoppingcart.services.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,9 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(
+    public ResponseEntity<JwtResponse> login(
         @Valid @RequestBody LoginRequest request
     ) {
         authenticationManager.authenticate(
@@ -27,7 +30,9 @@ public class AuthController {
             )
         );
 
-        return ResponseEntity.ok().build();
+        var token = jwtService.generateToken(request.getEmail());
+
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
