@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.playground.shoppingcart.config.JwtConfig;
 import org.playground.shoppingcart.dtos.JwtResponse;
 import org.playground.shoppingcart.dtos.LoginRequest;
 import org.playground.shoppingcart.dtos.UserDto;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
+    private final JwtConfig jwtConfig;
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -47,7 +49,7 @@ public class AuthController {
         var cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/auth/refresh");
-        cookie.setMaxAge(7 * 24 * 60 * 60);
+        cookie.setMaxAge(jwtConfig.getRefreshTokenExpiration());
         cookie.setSecure(true);
         response.addCookie(cookie);
 
