@@ -25,13 +25,13 @@ public class JwtService {
 
     private String generateToken(User user, long tokenExpiration) {
         return Jwts.builder()
-                .subject(user.getId().toString())
-                .claim("email", user.getEmail())
-                .claim("name", user.getName())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration))
-                .signWith(jwtConfig.getSecretKey())
-                .compact();
+            .subject(user.getId().toString())
+            .claim("email", user.getEmail())
+            .claim("name", user.getName())
+            .issuedAt(new Date())
+            .expiration(new Date(System.currentTimeMillis() + 1000 * tokenExpiration))
+            .signWith(jwtConfig.getSecretKey())
+            .compact();
     }
 
     public boolean validateToken(String token) {
