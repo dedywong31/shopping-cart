@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import org.playground.shoppingcart.config.JwtConfig;
+import org.playground.shoppingcart.entities.Role;
 import org.playground.shoppingcart.entities.User;
 import org.springframework.stereotype.Service;
 
@@ -56,5 +57,9 @@ public class JwtService {
 
     public Long getUserIdFromToken(String token) {
         return Long.valueOf(getClaims(token).getSubject());
+    }
+
+    public Role getRoleFromToken(String token) {
+        return Role.valueOf(getClaims(token).get("role", String.class));
     }
 }
