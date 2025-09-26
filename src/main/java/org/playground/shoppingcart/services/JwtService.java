@@ -15,9 +15,19 @@ public class JwtService {
     @Value("${spring.jwt.secret}")
     private String secret;
 
-    public String generateToken(User user) {
-        final long tokenExpiration = 86400;
+    public String generateAccessToken(User user) {
+        final long tokenExpiration = 5 * 60;
 
+        return generateToken(user, tokenExpiration);
+    }
+
+    public String generateRefreshToken(User user) {
+        final long tokenExpiration = 7 * 24 * 60 * 60;
+
+        return generateToken(user, tokenExpiration);
+    }
+
+    private String generateToken(User user, long tokenExpiration) {
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("email", user.getEmail())
@@ -28,7 +38,7 @@ public class JwtService {
                 .compact();
     }
 
-     public boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
             var claims = getClaims(token);
 
