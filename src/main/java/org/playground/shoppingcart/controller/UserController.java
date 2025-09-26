@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.playground.shoppingcart.dtos.RegisterUserRequest;
+import org.playground.shoppingcart.entities.Role;
 import org.playground.shoppingcart.entities.User;
 import org.playground.shoppingcart.mappers.UserMapper;
 import org.playground.shoppingcart.repositories.UserRepository;
@@ -39,15 +40,16 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> registerUser(
-            @Valid @RequestBody RegisterUserRequest request,
-            UriComponentsBuilder uriBuilder
+        @Valid @RequestBody RegisterUserRequest request,
+        UriComponentsBuilder uriBuilder
     ) {
         if (userRepository.existsByEmail(request.getEmail())) {
             return ResponseEntity.badRequest().body(
-                    Map.of("message", "Email is already registered"));
+                Map.of("message", "Email is already registered"));
         }
         var user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         var userDto = userMapper.toDto(user);
