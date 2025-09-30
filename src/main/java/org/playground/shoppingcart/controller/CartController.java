@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.playground.shoppingcart.dtos.AddItemToCartRequest;
-import org.playground.shoppingcart.dtos.CartDto;
-import org.playground.shoppingcart.dtos.CartItemDto;
-import org.playground.shoppingcart.dtos.UpdateCartItemRequest;
+import org.playground.shoppingcart.dtos.*;
 import org.playground.shoppingcart.exceptions.CartNotFoundException;
 import org.playground.shoppingcart.exceptions.ProductNotFoundException;
 import org.playground.shoppingcart.services.CartService;
@@ -17,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -81,16 +77,16 @@ public class CartController {
     }
 
     @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleCartNotFound() {
+    public ResponseEntity<ErrorDto> handleCartNotFound() {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-            Map.of("error", "Cart not found.")
+            new ErrorDto("Cart not found.")
         );
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleProductNotFound() {
+    public ResponseEntity<ErrorDto> handleProductNotFound() {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-            Map.of("error", "Product not found in the cart.")
+            new ErrorDto("Product not found in the cart.")
         );
     }
 }

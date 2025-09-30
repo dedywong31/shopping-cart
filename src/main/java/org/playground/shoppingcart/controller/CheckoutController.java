@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.playground.shoppingcart.dtos.CheckoutRequest;
 import org.playground.shoppingcart.dtos.CheckoutResponse;
+import org.playground.shoppingcart.dtos.ErrorDto;
 import org.playground.shoppingcart.entities.Order;
 import org.playground.shoppingcart.entities.OrderItem;
 import org.playground.shoppingcart.entities.OrderStatus;
@@ -13,8 +14,6 @@ import org.playground.shoppingcart.services.AuthService;
 import org.playground.shoppingcart.services.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -32,13 +31,13 @@ public class CheckoutController {
         var cart = cartRepository.getCartWithItemsById(checkoutRequest.getCartId()).orElse(null);
         if (cart == null) {
             return ResponseEntity.badRequest().body(
-                Map.of("error", "Cart not found")
+                new ErrorDto("Cart not found")
             );
         }
 
         if (cart.getItems().isEmpty()) {
             return ResponseEntity.badRequest().body(
-                Map.of("error", "Cart is empty")
+                new ErrorDto("Cart is empty")
             );
         }
 
