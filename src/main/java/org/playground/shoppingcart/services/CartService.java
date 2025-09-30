@@ -84,7 +84,7 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public void deleteCart(UUID cartId) {
+    public void clearCart(UUID cartId) {
         var cart = cartRepository.getCartWithItemsById(cartId).orElse(null);
         if (cart == null) {
            throw new CartNotFoundException();

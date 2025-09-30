@@ -76,7 +76,7 @@ public class CartController {
     public ResponseEntity<Void> deleteCart(
         @PathVariable("cartId") UUID cartId
     ) {
-        cartService.deleteCart(cartId);
+        cartService.clearCart(cartId);
         return ResponseEntity.noContent().build();
     }
 
