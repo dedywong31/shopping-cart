@@ -1,11 +1,14 @@
 package org.playground.shoppingcart.controller;
 
 import lombok.AllArgsConstructor;
+import org.playground.shoppingcart.dtos.ErrorDto;
 import org.playground.shoppingcart.dtos.OrderDto;
+import org.playground.shoppingcart.exceptions.OrderNotFoundException;
 import org.playground.shoppingcart.services.OrderService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,5 +21,24 @@ public class OrderController {
     @GetMapping
     public List<OrderDto> getAllOrders() {
         return orderService.getAllOrders();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDto> getOrder(
+        @PathVariable(name = "id") Long orderId
+    ) {
+        return ResponseEntity.ok(orderService.getOrder(orderId));
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Void> handleOrderNotFound(Exception exception) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorDto> handleAccessDenied(Exception exception) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ErrorDto(exception.getMessage()));
     }
 }
