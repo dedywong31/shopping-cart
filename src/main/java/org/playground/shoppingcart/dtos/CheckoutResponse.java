@@ -1,12 +1,11 @@
 package org.playground.shoppingcart.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class CheckoutResponse {
     private Long orderId;
-
-    public CheckoutResponse(Long id) {
-        this.orderId = id;
-    }
+    private String checkoutUrl;
 }
