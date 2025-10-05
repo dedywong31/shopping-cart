@@ -2,6 +2,7 @@ package org.playground.shoppingcart.controller;
 
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import com.stripe.net.Webhook;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -9,9 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.playground.shoppingcart.dtos.CheckoutRequest;
 import org.playground.shoppingcart.dtos.CheckoutResponse;
 import org.playground.shoppingcart.dtos.ErrorDto;
+import org.playground.shoppingcart.entities.OrderStatus;
 import org.playground.shoppingcart.exceptions.CartEmptyException;
 import org.playground.shoppingcart.exceptions.CartNotFoundException;
 import org.playground.shoppingcart.exceptions.PaymentException;
+import org.playground.shoppingcart.repositories.OrderRepository;
 import org.playground.shoppingcart.services.CheckoutService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/checkout")
 public class CheckoutController {
     private final CheckoutService checkoutService;
+    private final OrderRepository orderRepository;
 
     @Value("${stripe.webhookSecretKey}")
     private String webhookSecretKey;
@@ -44,7 +48,13 @@ public class CheckoutController {
             var stripeObject = event.getDataObjectDeserializer().getObject().orElse(null);
             switch (event.getType()) {
                 case "payment_intent.succeeded" -> {
-                    System.out.println("Payment succeeded: " + stripeObject);
+                    var paymentIntent = (PaymentIntent) stripeObject;
+                    if (paymentIntent != null) {
+                        var orderId = paymentIntent.getMetadata().get("order-id");
+                        var order = orderRepository.findById(Long.valueOf(orderId)).orElseThrow();
+                        order.setStatus(OrderStatus.PAID);
+                        orderRepository.save(order);
+                    }
                 }
                 case "payment_intent.failed" -> {
                     System.out.println("Payment failed: " + stripeObject);
