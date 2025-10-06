@@ -1,4 +1,4 @@
-package org.playground.shoppingcart.controller;
+package org.playground.shoppingcart.admin;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,7 +1,7 @@
 package org.playground.shoppingcart.orders;
 
 import lombok.AllArgsConstructor;
-import org.playground.shoppingcart.dtos.ErrorDto;
+import org.playground.shoppingcart.common.ErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;

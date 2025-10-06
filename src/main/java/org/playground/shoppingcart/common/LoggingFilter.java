@@ -1,4 +1,4 @@
-package org.playground.shoppingcart.filters;
+package org.playground.shoppingcart.common;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -2,7 +2,7 @@ package org.playground.shoppingcart.payment;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.playground.shoppingcart.dtos.ErrorDto;
+import org.playground.shoppingcart.common.ErrorDto;
 import org.playground.shoppingcart.carts.CartEmptyException;
 import org.playground.shoppingcart.carts.CartNotFoundException;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package org.playground.shoppingcart.dtos;
+package org.playground.shoppingcart.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
