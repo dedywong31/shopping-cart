@@ -1,5 +1,6 @@
 package org.playground.shoppingcart.orders;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.playground.shoppingcart.common.ErrorDto;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/orders")
+@Tag(name = "Orders")
 public class OrderController {
     private final OrderService orderService;
 

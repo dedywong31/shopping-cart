@@ -1,5 +1,6 @@
 package org.playground.shoppingcart.payment;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.playground.shoppingcart.common.ErrorDto;
@@ -14,6 +15,7 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/checkout")
+@Tag(name = "Checkout")
 public class CheckoutController {
     private final CheckoutService checkoutService;
 
