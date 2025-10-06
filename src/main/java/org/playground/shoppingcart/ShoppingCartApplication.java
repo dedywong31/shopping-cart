@@ -1,6 +1,6 @@
 package org.playground.shoppingcart;
 
-import org.playground.shoppingcart.users.UserService;
+import org.playground.shoppingcart.users.UserDetailsServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -9,6 +9,6 @@ import org.springframework.context.ApplicationContext;
 public class ShoppingCartApplication {
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(ShoppingCartApplication.class, args);
-        context.getBean(UserService.class);
+        context.getBean(UserDetailsServiceImpl.class);
     }
 }
