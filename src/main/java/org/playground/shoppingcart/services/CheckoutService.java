@@ -3,6 +3,7 @@ package org.playground.shoppingcart.services;
 import lombok.AllArgsConstructor;
 import org.playground.shoppingcart.dtos.CheckoutRequest;
 import org.playground.shoppingcart.dtos.CheckoutResponse;
+import org.playground.shoppingcart.dtos.WebhookRequest;
 import org.playground.shoppingcart.entities.Order;
 import org.playground.shoppingcart.exceptions.CartEmptyException;
 import org.playground.shoppingcart.exceptions.CartNotFoundException;
@@ -46,6 +47,16 @@ public class CheckoutService {
             orderRepository.delete(order);
             throw ex;
         }
+    }
 
+    public void handleWebhookEvent(WebhookRequest request) {
+        paymentGateway
+            .parseWebhookRequest(request)
+            .ifPresent(paymentResult -> {
+                var order = orderRepository.findById(paymentResult.getOrderId()).orElseThrow();
+                order.setStatus(paymentResult.getPaymentStatus());
+                orderRepository.save(order);
+            });
     }
 }
+
