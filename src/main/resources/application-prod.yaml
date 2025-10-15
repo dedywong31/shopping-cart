@@ -1,4 +1,4 @@
 spring:
   datasource:
     url: ${SPRING_DATASOURCE_URL}
-websiteUrl: https://shopping-cart-production-bd91.up.railway.app
+websiteUrl: https://mystore.com
